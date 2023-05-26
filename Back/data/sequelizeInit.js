@@ -1,6 +1,30 @@
 import {Sequelize} from "sequelize";
+import {
+    Inventaires
+} from "../models/Inventaires.js";
+import {
+    Utilisateurs
+} from "../models/Utilisateurs.js";
+import {
+    Monstres
+} from "../models/Monstres.js";
+import {
+    Campagnes
+} from "../models/Campagnes.js";
+import {
+    Objets
+} from "../models/Objets.js";
+import {
+    Stats
+} from "../models/Stats.js";
+import {
+    Personnages
+} from "../models/Personnages.js";
+import {
+    applyExtraSetup
+} from "./sequelizeAssociation.js";
 
-const sequelize = new Sequelize('project_jdr', 'root', '', {
+export const sequelize = new Sequelize('project_jdr', 'root', '', {
     host: 'localhost',
     dialect: "mysql"
 });
@@ -13,22 +37,19 @@ try {
 
 
 const modelDefiners = [
-    import('./models/Utilisateurs'),
-    import('./models/Campagnes'),
-    import('./models/Personnages'),
-    import("./models/Objets"),
-    import("./models/Monstres"),
-    import("./models/Stats"),
-    import("./models/Inventaires")
+    Utilisateurs,
+    Monstres,
+    Campagnes,
+    Objets,
+    Stats,
+    Inventaires,
+    Personnages
 ];
 for (const modelDefiner of modelDefiners) {
     modelDefiner(sequelize);
 }
 
-let association = import('./sequelizeAssociation');
-association(sequelize);
+applyExtraSetup(sequelize);
 
-await sequelize.sync({ force: true });
+await sequelize.sync({force: true});
 console.log("All models were synchronized successfully.");
-
-module.exports = sequelize;
