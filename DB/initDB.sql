@@ -109,7 +109,9 @@ CREATE TABLE Character_Skill (
 -- Create the Monster table
 CREATE TABLE Monster (
     monster_id INT PRIMARY KEY AUTO_INCREMENT,
-    monster_name VARCHAR(255) NOT NULL
+    monster_name VARCHAR(255) NOT NULL,
+    monster_hp INT ,
+    monster_attack INT
 ) ENGINE=InnoDB;
 
 CREATE TABLE Monster_Loot (
@@ -120,6 +122,16 @@ CREATE TABLE Monster_Loot (
     FOREIGN KEY (monster_id) REFERENCES Monster(monster_id),
     FOREIGN KEY (item_id) REFERENCES Item(item_id)
 ) ENGINE=InnoDB;
+
+-- Create the Monster_Skill table
+CREATE TABLE Monster_Skill (
+    monster_skill_id INT PRIMARY KEY AUTO_INCREMENT,
+    monster_id INT,
+    skill_id INT,
+    FOREIGN KEY (monster_id) REFERENCES Monster(monster_id),
+    FOREIGN KEY (skill_id) REFERENCES Skill(skill_id)
+) ENGINE=InnoDB;
+
 
 -- Add foreign key constraints
 
@@ -171,3 +183,9 @@ ADD CONSTRAINT fk_monster_loot_monster
     FOREIGN KEY (monster_id) REFERENCES Monster(monster_id),
 ADD CONSTRAINT fk_monster_loot_item
     FOREIGN KEY (item_id) REFERENCES Item(item_id);
+
+ALTER TABLE Monster_Skill
+ADD CONSTRAINT fk_monster_skill_monster
+    FOREIGN KEY (monster_id) REFERENCES Monster(monster_id),
+ADD CONSTRAINT fk_monster_skill_skill
+    FOREIGN KEY (skill_id) REFERENCES Skill(skill_id)

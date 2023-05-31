@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "allowSytheticDefaultImports": "true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,6 +17,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.3.2",
-    "sequelize": "^6.31.1"
+    "sequelize": "^6.31.1",
+    "sequelize-auto": "^0.8.8"
   }
 }
