@@ -16,6 +16,7 @@ const _user = require("./user");
 
 
 
+
 function initModels(sequelize) {
   const campaign = _campaign(sequelize, DataTypes);
   const campaign_user = _campaign_user(sequelize, DataTypes);
