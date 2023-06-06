@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+export default function(sequelize, DataTypes) {
   return sequelize.define('monster_skill', {
     monster_skill_id: {
       autoIncrement: true,

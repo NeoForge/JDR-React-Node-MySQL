@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+export default function(sequelize, DataTypes) {
   return sequelize.define('user', {
     user_id: {
       autoIncrement: true,

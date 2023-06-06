@@ -1,18 +1,18 @@
-const DataTypes = require("sequelize").DataTypes;
-const _campaign = require("./campaign");
-const _campaign_user = require("./campaign_user");
-const _character_item = require("./character_item");
-const _character_skill = require("./character_skill");
-const _character_stat = require("./character_stat");
-const _equipment = require("./equipment");
-const _item = require("./item");
-const _monster = require("./monster");
-const _monster_loot = require("./monster_loot");
-const _monster_skill = require("./monster_skill");
-const _playercharacter = require("./playercharacter");
-const _skill = require("./skill");
-const _stat = require("./stat");
-const _user = require("./user");
+import { DataTypes } from 'sequelize';
+import _campaign from './campaign.js';
+import _campaign_user from './campaign_user.js';
+import _character_item from './character_item.js';
+import _character_skill from './character_skill.js';
+import _character_stat from './character_stat.js';
+import _equipment from './equipment.js';
+import _item from './item.js';
+import _monster from './monster.js';
+import _monster_loot from './monster_loot.js';
+import _monster_skill from './monster_skill.js';
+import _playercharacter from './playercharacter.js';
+import _skill from './skill.js';
+import _stat from './stat.js';
+import _user from './user.js';
 
 
 
@@ -85,6 +85,8 @@ function initModels(sequelize) {
     user,
   };
 }
-module.exports = initModels;
-module.exports.initModels = initModels;
-module.exports.default = initModels;
+
+// module.exports = initModels;
+// module.exports.initModels = initModels;
+// module.exports.default = initModels;
+export default initModels;

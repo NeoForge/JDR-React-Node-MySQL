@@ -1,5 +1,5 @@
-const {userRoutes} = require('./userRoute');
+import { userRoutes } from './userRoute.js';
 
-exports.routeLoader = (app) => {
+export const routeLoader = (app) => {
     userRoutes(app);
-}
+};

@@ -1,6 +1,6 @@
-const UserController = require('../controllers/userController');
+import UserController from '../controllers/userController.js';
 
-exports.userRoutes = (app) => {
+export const userRoutes = (app) => {
     app.post('/register', UserController.register);
     app.post('/login', UserController.login);
     app.get('/users', UserController.getAllUser);
@@ -9,4 +9,4 @@ exports.userRoutes = (app) => {
     app.put('/users/:id', UserController.updateOneById);
     app.delete('/users/:id', UserController.deleteOneById);
     console.log('User routes loaded');
-}
+};

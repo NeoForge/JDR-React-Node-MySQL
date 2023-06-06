@@ -1,5 +1,6 @@
-const {Sequelize} = require('sequelize');
-const {initModels} = require("../models/init-models");
+import { Sequelize } from 'sequelize';
+import  initModels  from '../models/init-models.js';
+
 const sequelize = new Sequelize("jdr_project", "root", "", {
     host: "localhost",
     dialect: "mysql"
@@ -7,6 +8,7 @@ const sequelize = new Sequelize("jdr_project", "root", "", {
 
 initModels(sequelize);
 //Start the connection to the database
+startDBConnection();
 async function startDBConnection() {
     try {
         // Establish the database connection
@@ -22,4 +24,4 @@ async function startDBConnection() {
         console.error('Unable to connect to the database:', error);
     }
 }
-module.exports = {startDBConnection, sequelize};
+export default sequelize;

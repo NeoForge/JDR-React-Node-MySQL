@@ -1,16 +1,18 @@
-const {User} = require('../models/user');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const {sequelize} = require('../data/sequelize');
-const {Op} = require('sequelize');
+import  sequelize  from '../data/sequelize.js';
+import  User  from '../models/user.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import {DataTypes, Op} from 'sequelize';
 const JWT_Secret = 'secret';
 const JWT_Secret_Admin = 'secret_admin';
+import initModels from "../models/init-models.js";
 
-module.exports = class {
+class UserController {
     async register(req, res) {
         try {
+            const UserActual = User(sequelize, DataTypes);
             const {username, email, password, isAdmin} = req.body;
-            const user = await User.findOne({
+            const user = await UserActual.findOne({
                 where: {
                     [Op.or]: [
                         {username: username},
@@ -123,4 +125,6 @@ module.exports = class {
             res.status(400).json({message: error.message});
         }
     }
-}
+};
+
+export default new UserController();
