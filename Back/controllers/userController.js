@@ -1,18 +1,16 @@
 import  sequelize  from '../data/sequelize.js';
-import  User  from '../models/user.js';
+import  user  from '../models/user.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {DataTypes, Op} from 'sequelize';
 const JWT_Secret = 'secret';
 const JWT_Secret_Admin = 'secret_admin';
-import initModels from "../models/init-models.js";
-
+const User = user(sequelize, DataTypes);
 class UserController {
     async register(req, res) {
         try {
-            const UserActual = User(sequelize, DataTypes);
             const {username, email, password, isAdmin} = req.body;
-            const user = await UserActual.findOne({
+            const user = await User.findOne({
                 where: {
                     [Op.or]: [
                         {username: username},
@@ -53,8 +51,12 @@ class UserController {
                         const token = jwt.sign({id: user.user_id}, JWT_Secret_Admin);
                         res.status(200).json({token: token});
                     }
-                    const token = jwt.sign({id: user.user_id}, JWT_Secret);
-                    res.status(200).json({token: token});
+                    else
+                    {
+                        const token = jwt.sign({id: user.user_id}, JWT_Secret);
+                        res.status(200).json({token: token});
+                    }
+
                 }
             }
         } catch (error) {

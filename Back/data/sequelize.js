@@ -6,7 +6,7 @@ const sequelize = new Sequelize("jdr_project", "root", "", {
     dialect: "mysql"
 });
 
-initModels(sequelize);
+// initModels(sequelize);
 //Start the connection to the database
 startDBConnection();
 async function startDBConnection() {

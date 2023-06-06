@@ -1,3 +1,5 @@
+
+###Register Account
 POST http://localhost:3000/register
 Content-Type: application/json
 
@@ -6,4 +8,13 @@ Content-Type: application/json
   "password": "pass",
   "email": "bob@mail.com",
   "isAdmin": "true"
+}
+
+###Login Account
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+"email": "bob@mail.com",
+"password": "pass"
 }
