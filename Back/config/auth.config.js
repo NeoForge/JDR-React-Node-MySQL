@@ -1,15 +1,64 @@
 import jwt from 'jsonwebtoken';
 
-export const verifyToken = (req, res, next) => {
-    const token = req.header("token");
+const JWT_Secret = 'secret';
+const JWT_Secret_Admin = 'secret_admin';
+
+export const auth = (req, res, next) => {
+    const token = req.headers['authorization'];
     if (!token) {
-        return res.status(401).json({ message: "User's not authenticated" });
+        return res.status(403).send({ auth: false, message: 'No token provided.' });
     }
-    try {
-        const decoded = jwt.verify(token, "userLoginStringForToken");
-        req.user = decoded.user;
+    let decoded = verifyToken(token);
+    if (decoded) {
+        req.userId = decoded.id;
         next();
-    } catch (e) {
-        res.status(500).send({ message: "Invalid Token" + e });
     }
-};
+    else {
+        decoded = verifyTokenAdmin(token);
+        if (decoded) {
+            req.userId = decoded.id;
+            req.isAdmin = true;
+            next();
+        }
+        else {
+            return res.status(401).send({ auth: false, message: 'Failed to authenticate token.' });
+        }
+    }
+}
+
+export const authAdmin = (req, res, next) => {
+    //Token in Authorization header
+    const token = req.headers['authorization'];
+    if (!token) {
+        return res.status(403).send({ auth: false, message: 'No token provided.' });
+    }
+    let decoded = verifyTokenAdmin(token);
+    if (decoded) {
+        req.userId = decoded.id;
+        req.isAdmin = true;
+        next();
+    }
+    else {
+        return res.status(401).send({ auth: false, message: 'Failed to authenticate token.' });
+    }
+}
+
+const verifyToken = (token) => {
+    return jwt.verify(token, JWT_Secret, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            return false;
+        }
+        return decoded;
+    });
+}
+
+const verifyTokenAdmin = (token) => {
+    return jwt.verify(token, JWT_Secret_Admin, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            return false;
+        }
+        return decoded;
+    });
+}

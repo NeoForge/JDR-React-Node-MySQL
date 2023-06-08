@@ -6,7 +6,7 @@ const sequelize = new Sequelize("jdr_project", "root", "", {
     dialect: "mysql"
 });
 
-// initModels(sequelize);
+export const models = initModels(sequelize);
 //Start the connection to the database
 startDBConnection();
 async function startDBConnection() {
@@ -17,11 +17,8 @@ async function startDBConnection() {
         // Synchronize the models with the database
         await sequelize.sync();
         console.log('Models synchronized with the database.');
-
-        // Start your application
-        // ...
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
 }
-export default sequelize;
+export default {sequelize};

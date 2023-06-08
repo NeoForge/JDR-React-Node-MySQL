@@ -1,0 +1,33 @@
+
+###Register Account
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "pass",
+  "email": "bob@mail.com",
+  "isAdmin": "true"
+}
+
+###Login Account
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+"email": "bob@mail.com",
+"password": "pass"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+
+###Create Campaign
+POST http://localhost:3000/campaigns
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjg2MjEyNDY2fQ.qpSnDqojd988rXkXL79Ngi2TAvtDXtSR36vG2QhrlZI
+
+{
+  "campaign_name": "Campaign 1",
+  "description": "This is a campaign"
+}

@@ -1,11 +1,10 @@
-import  sequelize  from '../data/sequelize.js';
-import  user  from '../models/user.js';
+import  {models}  from '../data/sequelize.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {DataTypes, Op} from 'sequelize';
+import {Op} from 'sequelize';
 const JWT_Secret = 'secret';
 const JWT_Secret_Admin = 'secret_admin';
-const User = user(sequelize, DataTypes);
+const User = models.user;
 class UserController {
     async register(req, res) {
         try {
