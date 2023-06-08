@@ -1,10 +1,11 @@
-import  {models}  from '../data/sequelize.js';
+import {models} from '../data/sequelize.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {Op} from 'sequelize';
+
 const JWT_Secret = 'secret';
-const JWT_Secret_Admin = 'secret_admin';
 const User = models.user;
+
 class UserController {
     async register(req, res) {
         try {
@@ -45,17 +46,8 @@ class UserController {
                 if (!match) {
                     res.status(401).json({message: "Incorrect password"});
                 } else {
-                    if(user.isAdmin)
-                    {
-                        const token = jwt.sign({id: user.user_id}, JWT_Secret_Admin);
-                        res.status(200).json({token: token});
-                    }
-                    else
-                    {
-                        const token = jwt.sign({id: user.user_id}, JWT_Secret);
-                        res.status(200).json({token: token});
-                    }
-
+                    const token = jwt.sign({id: user.user_id,isAdmin :user.isAdmin}, JWT_Secret);
+                    res.status(200).json({token: token});
                 }
             }
         } catch (error) {
@@ -86,15 +78,14 @@ class UserController {
     }
 
     async getOneByMail(req, res) {
-        try{
+        try {
             const user = await User.findOne({where: {email: req.params.email}});
             if (user) {
                 res.status(200).json(user);
             } else {
                 res.status(404).json({message: "User not found"});
             }
-        }
-        catch(error){
+        } catch (error) {
             res.status(400).json({message: error.message});
         }
     }

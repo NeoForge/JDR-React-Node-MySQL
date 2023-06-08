@@ -1,64 +1,28 @@
 import jwt from 'jsonwebtoken';
-
 const JWT_Secret = 'secret';
-const JWT_Secret_Admin = 'secret_admin';
 
-export const auth = (req, res, next) => {
-    const token = req.headers['authorization'];
+//Verify the token and add the user id to the request if the token is valid and add an option to have only admin access
+
+export const Auth = (req, res, next) => {
+    VerifyToken(false,req, res, next);
+}
+export const AuthAdmin = (req, res, next) => {
+    VerifyToken(true,req, res, next);
+}
+const VerifyToken = (admin,req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
     if (!token) {
-        return res.status(403).send({ auth: false, message: 'No token provided.' });
+        return res.status(401).json({message: "No token provided"});
     }
-    let decoded = verifyToken(token);
-    if (decoded) {
-        req.userId = decoded.id;
-        next();
-    }
-    else {
-        decoded = verifyTokenAdmin(token);
-        if (decoded) {
-            req.userId = decoded.id;
-            req.isAdmin = true;
-            next();
-        }
-        else {
-            return res.status(401).send({ auth: false, message: 'Failed to authenticate token.' });
-        }
-    }
-}
-
-export const authAdmin = (req, res, next) => {
-    //Token in Authorization header
-    const token = req.headers['authorization'];
-    if (!token) {
-        return res.status(403).send({ auth: false, message: 'No token provided.' });
-    }
-    let decoded = verifyTokenAdmin(token);
-    if (decoded) {
-        req.userId = decoded.id;
-        req.isAdmin = true;
-        next();
-    }
-    else {
-        return res.status(401).send({ auth: false, message: 'Failed to authenticate token.' });
-    }
-}
-
-const verifyToken = (token) => {
-    return jwt.verify(token, JWT_Secret, (err, decoded) => {
+    jwt.verify(token, JWT_Secret, (err, decoded) => {
         if (err) {
-            console.log(err);
-            return false;
+            return res.status(401).json({message: "Unauthorized"});
         }
-        return decoded;
-    });
-}
-
-const verifyTokenAdmin = (token) => {
-    return jwt.verify(token, JWT_Secret_Admin, (err, decoded) => {
-        if (err) {
-            console.log(err);
-            return false;
+        req.userId = decoded.id;
+        req.isAdmin = decoded.isAdmin;
+        if(admin && !req.isAdmin){
+            return res.status(401).json({message: "Unauthorized"});
         }
-        return decoded;
+        next();
     });
 }

@@ -1,13 +1,13 @@
 import CampaignController from "../controllers/campaignController.js";
-import {auth} from "../config/auth.config.js";
+import {Auth, AuthAdmin} from "../config/auth.config.js";
 
 export const campaignRoutes = (app) => {
-    app.get('/campaigns',auth,CampaignController.getAllCampaigns);
-    app.get('/campaigns/:id',auth,CampaignController.getCampaignById);
-    app.post('/campaigns',auth,CampaignController.createCampaign);
-    app.put('/campaigns/:id',auth, CampaignController.updateCampaign);
-    app.delete('/campaigns/:id',auth, CampaignController.deleteCampaign);
-    app.get('/campaigns/GetByGameMaster',auth, CampaignController.getCampaignsByGameMasterId);
-    app.get('/campaigns/GetByPlayer', auth,CampaignController.getCampaignsByUserId);
+    app.get('/campaigns',CampaignController.getAllCampaigns);
+    app.get('/campaigns/:id',CampaignController.getCampaignById);
+    app.post('/campaigns',AuthAdmin,CampaignController.createCampaign);
+    app.put('/campaigns/:id', CampaignController.updateCampaign);
+    app.delete('/campaigns/:id', CampaignController.deleteCampaign);
+    app.get('/campaigns/GetByGameMaster', CampaignController.getCampaignsByGameMasterId);
+    app.get('/campaigns/GetByPlayer',CampaignController.getCampaignsByUserId);
 
 }
