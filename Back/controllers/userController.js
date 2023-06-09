@@ -2,7 +2,6 @@ import {models} from '../data/sequelize.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {Op} from 'sequelize';
-
 const JWT_Secret = 'secret';
 const User = models.user;
 

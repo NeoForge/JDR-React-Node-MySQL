@@ -8,7 +8,7 @@ const sequelize = new Sequelize("jdr_project", "root", "", {
 
 export const models = initModels(sequelize);
 //Start the connection to the database
-startDBConnection();
+startDBConnection().then(r => console.log("I tried"));
 async function startDBConnection() {
     try {
         // Establish the database connection
