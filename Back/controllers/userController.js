@@ -8,7 +8,7 @@ const User = models.user;
 class UserController {
     async register(req, res) {
         try {
-            const {username, email, password, isAdmin} = req.body;
+            const {username, email, password} = req.body;
             const user = await User.findOne({
                 where: {
                     [Op.or]: [
@@ -25,9 +25,10 @@ class UserController {
                     username: username,
                     email: email,
                     password: hashedPassword,
-                    isAdmin: isAdmin
+                    isAdmin: false
                 });
-                res.status(201).json(newUser);
+                const token = jwt.sign({id: newUser.user_id,isAdmin :newUser.isAdmin}, JWT_Secret);
+                res.status(200).json({token: token});
             }
         } catch (error) {
             res.status(400).json({message: error.message});
