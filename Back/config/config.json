@@ -1,0 +1,9 @@
+{
+    "developpement": {
+        "username": "root",
+        "password": null,
+        "database": "jdr_project",
+        "host": "localhost",
+        "dialect": "mysql"
+    }
+}

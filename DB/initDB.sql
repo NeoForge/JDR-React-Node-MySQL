@@ -44,7 +44,8 @@ CREATE TABLE PlayerCharacter (
 -- Create the Stat table
 CREATE TABLE Stat (
     stat_id INT PRIMARY KEY AUTO_INCREMENT,
-    stat_name VARCHAR(255) NOT NULL
+    stat_name VARCHAR(255) NOT NULL,
+    stat_abrv VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
 -- Create the Character_Stat table

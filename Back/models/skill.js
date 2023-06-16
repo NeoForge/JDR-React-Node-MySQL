@@ -1,4 +1,4 @@
-export default function(sequelize, DataTypes) {
+export default function (sequelize, DataTypes) {
   return sequelize.define('skill', {
     skill_id: {
       autoIncrement: true,
