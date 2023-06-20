@@ -121,6 +121,22 @@ class PlayerCharacterController {
         }
     }
 
+    async getCharFromUserAndCampaign(req, res) {
+        try {
+            const userId = req.params.id;
+            const {campaignId} = req.body;
+            const characterFromUserCampaign = await PlayerCharacter.findAll({
+                where: {
+                    user_id: userId,
+                    campaign_id: campaignId,
+                }
+            })
+            res.status(200).json(characterFromUserCampaign)
+        } catch (e) {
+            res.status(400).json({ message: e.message });
+        }
+    }
+
     async updateCharForPlayer(req, res) {
         try {
             const userId = req.userId;
@@ -135,6 +151,41 @@ class PlayerCharacterController {
             }
         } catch (error) {
             res.status(400).json({ message: error.message });
+        }
+    }
+
+    async getAllTheShitFromChar(req, res) {
+        try {
+            const characterId = req.params.id;
+            const characterShit = await PlayerCharacter.findAll({
+                where: {character_id: characterId},
+                include: [{
+                    model: models.character_stat, as: 'character_stats',
+                    include: {
+                        model: models.stat, as: 'stat', attribute: ['stat_abrv'
+                        ]
+                    }
+                }, {
+                    model: models.character_skill, as: 'character_skills',
+                    include: {
+                        model: models.skill, as: 'skill', attributes: ['skill_name', 'skill_type', 'skill_level', 'skill_description']
+                    }
+                }, {
+                    model: models.equipment, as: 'equipments',
+                    include: {
+                        model: models.item, as: 'item', attributes: ['item_name', 'item_type', 'item_rarity', 'item_description', 'item_effect']
+                    }
+                }, {
+                    model: models.character_item, as: 'character_items',
+                    include: {
+                        model: models.item, as: 'item', attributes: ['item_name', 'item_type', 'item_rarity', 'item_description', 'item_effect', 'item_price']
+                    }
+                },
+                ]
+            })
+            res.status(200).json(characterShit)
+        } catch (e) {
+            res.status(400).json({ message: e.message });
         }
     }
 }

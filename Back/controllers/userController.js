@@ -2,8 +2,10 @@ import { models } from '../data/sequelize.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
+import campaign_user from "../models/campaign_user.js";
 const JWT_Secret = 'secret';
 const User = models.user;
+const CampaignUser = models.campaign_user;
 
 class UserController {
     async register(req, res) {
@@ -115,6 +117,25 @@ class UserController {
             }
         } catch (error) {
             res.status(400).json({ message: error.message });
+        }
+    }
+
+    async getAllCampaignFromUser(req, res){
+        try {
+            const userId = req.params.id;
+            const usersCampaigns = await CampaignUser.findAll({
+                where: {user_id: userId},
+                include: [{
+                    model: models.campaign, as: 'campaign',
+                    include: {
+                        model: models.user, as: 'game_master', attributes:
+                            ['username', 'email']
+                    }
+                }]
+            })
+            res.status(200).json(usersCampaigns)
+        } catch (e) {
+            res.status(400).json({ message: e.message });
         }
     }
 

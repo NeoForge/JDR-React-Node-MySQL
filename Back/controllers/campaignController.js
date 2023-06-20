@@ -124,7 +124,7 @@ class CampaignController {
     async getAllUserFromCampaign(req, res) {
         try {
             const campaignId = req.params.id;
-            const characters = await Campaign.findByPk(campaignId,
+            const campaignUsers = await Campaign.findByPk(campaignId,
                 {
                     include: [{
                         model: models.campaign_user, as: 'campaign_users', attributes: ['user_id'],
@@ -134,7 +134,7 @@ class CampaignController {
                         model: models.user, as: 'game_master', attributes: ['user_id', 'username', 'email']
                     }]
                 });
-            res.status(200).json(characters);
+            res.status(200).json(campaignUsers);
         } catch (e) {
             res.status(400).json({message: e.message});
         }
