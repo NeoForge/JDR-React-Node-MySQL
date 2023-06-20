@@ -1,4 +1,5 @@
-import { models } from '../data/sequelize.js';
+import {models} from '../data/sequelize.js';
+import playercharacter from "../models/playercharacter.js";
 
 const Campaign = models.campaign;
 const CampaignUser = models.campaign_user;
@@ -9,7 +10,7 @@ class CampaignController {
     //Create a new campaign in the database , the user must be logged in and game_master_id must be the same as the user id
     async createCampaign(req, res) {
         try {
-            const { campaign_name, description } = req.body;
+            const {campaign_name, description} = req.body;
             const userId = req.userId;
             const newCampaign = await Campaign.create({
                 campaign_name: campaign_name,
@@ -19,7 +20,7 @@ class CampaignController {
             });
             res.status(201).json(newCampaign);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
         }
     }
 
@@ -29,7 +30,7 @@ class CampaignController {
             const campaigns = await Campaign.findAll();
             res.status(200).json(campaigns);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
         }
     }
 
@@ -40,7 +41,7 @@ class CampaignController {
             const campaign = await Campaign.findByPk(campaignId);
             res.status(200).json(campaign);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
         }
     }
 
@@ -48,7 +49,7 @@ class CampaignController {
     async updateCampaign(req, res) {
         try {
             const campaignId = req.params.id;
-            const { campaign_name, description } = req.body;
+            const {campaign_name, description} = req.body;
             const userId = req.userId;
             const isAdmin = req.isAdmin;
             const campaign = await Campaign.findByPk(campaignId);
@@ -58,10 +59,10 @@ class CampaignController {
                 await campaign.save();
                 res.status(200).json(campaign);
             } else {
-                res.status(403).json({ message: "You are not allowed to update this campaign" });
+                res.status(403).json({message: "You are not allowed to update this campaign"});
             }
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
         }
     }
 
@@ -74,12 +75,12 @@ class CampaignController {
             const campaign = await Campaign.findByPk(campaignId);
             if (campaign.game_master_id === userId || isAdmin) {
                 await campaign.destroy();
-                res.status(200).json({ message: "Campaign deleted" });
+                res.status(200).json({message: "Campaign deleted"});
             } else {
-                res.status(403).json({ message: "You are not allowed to delete this campaign" });
+                res.status(403).json({message: "You are not allowed to delete this campaign"});
             }
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
         }
     }
 
@@ -87,10 +88,10 @@ class CampaignController {
     async getCampaignsByGameMasterId(req, res) {
         try {
             const gameMasterId = req.params.id;
-            const campaigns = await Campaign.findAll({ where: { game_master_id: gameMasterId } });
+            const campaigns = await Campaign.findAll({where: {game_master_id: gameMasterId}});
             res.status(200).json(campaigns);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
         }
     }
 
@@ -98,10 +99,44 @@ class CampaignController {
     async getCampaignsByUserId(req, res) {
         try {
             const userId = req.params.id;
-            const campaigns = await CampaignUser.findAll({ where: { user_id: userId } });
+            const campaigns = await CampaignUser.findAll({where: {user_id: userId}});
             res.status(200).json(campaigns);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).json({message: error.message});
+        }
+    }
+
+    async getAllCharacterFromCampaign(req, res) {
+        try {
+            const campaignId = req.params.id;
+            const characters = await Campaign.findByPk(campaignId, {
+                include: {
+                    model: models.playercharacter,
+                    as: 'playercharacters'
+                }
+            });
+            res.status(200).json(characters);
+        } catch (e) {
+            res.status(400).json({message: e.message});
+        }
+    }
+
+    async getAllUserFromCampaign(req, res) {
+        try {
+            const campaignId = req.params.id;
+            const characters = await Campaign.findByPk(campaignId,
+                {
+                    include: [{
+                        model: models.campaign_user, as: 'campaign_users', attributes: ['user_id'],
+                        include: {model: models.user, as: 'user', attributes: ['username', 'email']}
+                    }, 
+                    {
+                        model: models.user, as: 'game_master', attributes: ['user_id', 'username', 'email']
+                    }]
+                });
+            res.status(200).json(characters);
+        } catch (e) {
+            res.status(400).json({message: e.message});
         }
     }
 }

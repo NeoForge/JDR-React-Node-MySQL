@@ -9,6 +9,8 @@ export const campaignRoutes = (app) => {
     app.post('/campaigns/create', Auth, CampaignController.createCampaign);
     app.put('/campaigns/update/:id', Auth, CampaignController.updateCampaign);
     app.delete('/campaigns/delete/:id', Auth, CampaignController.deleteCampaign);
+    app.get('/campaigns/GetAllPlayer/:id', Auth, CampaignController.getAllCharacterFromCampaign);
+    app.get('/campaigns/GetAllUser/:id', Auth, CampaignController.getAllUserFromCampaign);
 
 
 }
